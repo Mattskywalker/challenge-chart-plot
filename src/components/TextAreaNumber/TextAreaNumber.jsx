@@ -10,20 +10,14 @@ export default function TextAreaNumber() {
 
     function handleChange(viewUpdate) {
         const { doc } = viewUpdate.state;
-        let text = doc.text;
-
-        if (!text) {
-            const listChild = doc.children.flatMap((child) => child.text);
-            saveEvent(listChild);
-        } else {
-            saveEvent(text);
-        }
+        const listEvents = doc.toJSON();
+        saveEvent(listEvents);
     }
 
     return (
         <div className="OverFlow">
             <CodeMirror
-                onUpdate={(viewUpdate) => handleChange(viewUpdate)}
+                onChange={(event, viewUpdate) => handleChange(viewUpdate)}
                 className="CodeMirror"
                 theme={"dark"}
                 extensions={[json({})]}
