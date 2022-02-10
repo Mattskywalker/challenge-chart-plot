@@ -1,0 +1,62 @@
+.resizable-container {
+  height: calc(100vh - 64px - 80px);
+  --separator: 50;
+}
+
+.resizable-container .area1 {
+  height: calc(var(--separator) * 1%);
+  background-color: #666;
+}
+
+.resizable-container .area2 {
+  height: calc((100 - var(--separator)) * 1%);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  z-index: 9;
+  
+}
+
+.resizable-container .resize-bar {
+  height: 12px;
+  cursor: ns-resize;
+  margin: -6px 0;
+  z-index: 10;
+  position: relative;
+  background-color: transparent;
+  transition: 0.15s;
+  user-select: none;
+  
+}
+
+.resizable-container .resize-bar:hover {
+  background-color: #0006;
+}
+
+.resizable-container .resize-bar:active {
+  background-color: #000;
+}
+
+.resizable-container .resize-bar::after {
+  content: "";
+  position: absolute;
+  display: block;
+  z-index: 2;
+  width: 32px;
+  height: 12px;
+  background-color: #000;
+  border-radius: 4px;
+  left: calc(50% - 16px);
+}
+
+.resizable-container .resize-bar::before {
+  content: "";
+  position: absolute;
+  display: block;
+  z-index: 3;
+  width: 24px;
+  top: 3px;
+  height: 4px;
+  border: 1px solid #fff;
+  border-width: 1px 0;
+  left: calc(50% - 12px);
+}

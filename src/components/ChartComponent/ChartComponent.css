@@ -1,0 +1,32 @@
+.ChartComponent {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #FFF;
+    font-size: 1;
+    
+    
+}
+
+.ChartContainer {
+    
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    width: 90%;
+    height: 90%;
+    padding: 10px;
+    
+    background-color: #FFF;
+    
+}
+
+.Chart {
+    height: 100%;
+}

@@ -1,0 +1,77 @@
+
+.OverFlow {
+    display: flex;
+    background-color: #282c34;
+    height: 100%;
+    padding-top: 4px;
+    
+}
+
+.CodeMirror {
+    font-size: 20px;
+    
+    font-family: 'Source Code Pro' ,'Courier New', Courier, monospace;
+    width: 100%;
+    
+}
+.CodeMirror .cm-editor .cm-scroller .cm-gutters .cm-lineNumbers .cm-gutterElement {
+    color: black;
+    width: 50px;
+    
+}
+
+.CodeMirror .cm-editor .cm-scroller .cm-gutters {
+    background-color: #60656E;
+}
+
+.CodeMirror .cm-editor.cm-focused { 
+    outline: none;
+}
+.CodeMirror .cm-editor .cm-content { 
+    
+    font-family: 'Source Code Pro';
+
+}
+
+#root > div > div.Home > div.resizable-container > div.area1 > div > div > div > div.cm-scroller > div.cm-content > div > span.ͼq {
+    color: white;
+    /* font-weight: bold; */
+    
+    
+}
+
+#root > div > div.Home > div.resizable-container > div.area1 > div > div > div > div.cm-scroller > div.cm-content > div > span.ͼ13 {
+    color: aqua;
+    
+}
+
+#root > div > div.Home > div.resizable-container > div.area1 > div > div > div > div.cm-scroller > div.cm-content > div > span.ͼu {
+    /* font-weight: bold; */
+    color: #C886FF;
+}
+
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #60656E #2E3440;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+background: #2E3440;
+
+}
+
+*::-webkit-scrollbar-thumb {
+background-color: #60656E;
+border-radius: 20px;
+
+}
+
+/* 
+@media only screen and (min-width : 1400px) and (max-width : 1549px)
+{ css para este tamanho} */

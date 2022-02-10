@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChartComponent No Render chart with invalid or incomplete data 1`] = `
+<div
+  className="ChartComponent"
+/>
+`;
+
+exports[`ChartComponent Render chart with valid data 1`] = `
+<div
+  className="ChartComponent"
+>
+  <div
+    className="ChartContainer"
+  />
+</div>
+`;

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: chartContext.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: chartContext.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { createContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+export const ChartContext = createContext({});
+
+function ChartProvider({ children }) {//the ContextApi was chose because many components need to access these states;
+
+    const [events, setEvent] = useState('');//this state refers to the TextArea value
+    const [generateChart, setGenerateChart] = useState(false);
+    const [listEventObject, setEventList] = useState([]);
+    const [chartData, setChartData] = useState({
+		columns: ["periode"],
+		rows: []
+	});
+    
+    useEffect(buildData, [listEventObject]);
+    
+    /**
+     * 
+     * @param {chartData} chartData - Object that contains the chartData.
+     * @description This function verifies the chartData, if they're incomplete,
+     * clear the data and shows an error toast on the user interface, if they're complete,
+     * set the data on the state.
+     */
+    function handleChartData(chartData) {
+        const { columns, rows } = chartData;
+
+        try {
+            rows.forEach((line) => {
+                if(columns.length !== line.length){
+                    throw new Error('Incomplete data, please verify the inputs and try again.');
+                }
+            })
+            setChartData({...chartData});
+        }catch (error) {
+            columns.splice(0, columns.length);
+            rows.splice(0, rows.length);
+
+            setChartData({columns, rows});
+            toast.error(error.message);
+        }
+        
+    }
+    /**
+     * @param {String} columnName - column name.
+     * @param {Array} columns - array of columns.
+     * @description this function adds a new data column and returns its position.
+     */
+    function addColumns(columnName, columns) {
+		
+		if(!columns.includes(columnName)) {
+			columns.push(columnName);
+			return columns.indexOf(columnName);
+		}else {
+			return columns.indexOf(columnName);
+		}
+	}
+
+    /**
+     * @param {number} columnIndex - The column index, where the data must be placed.
+     * @param {any} value - Value to be placed.
+     * @param {Array} rows - Array that contains all lines of chartData.
+     * @description - This function places correctly each data in its column. When necessary, the function creates a new data row.
+     */
+	function addRows( columnIndex, value, rows ) {
+		
+		if(rows.length === 0) {//verify if it's necessary to create a new Row. If it is, insert the data value in the correct column;
+
+			const line = []
+			line[columnIndex] = value;
+			rows.push(line);
+			
+		}else {
+
+			for(var i = 0;i &lt;= rows.length; i++) {
+				var nextLine = i + 1;
+
+				if(rows[i][columnIndex] &amp;&amp; !rows[nextLine]) {//if both row and column alredy have got a value, this condition creates a new Line and places the data in the correct column;
+					const line = [];
+					line[columnIndex] = value;
+					rows.push(line);
+					break;
+				}else if(!rows[i][columnIndex]) {//if those row and column haven't got any value, this condition places the data in the empty gap;
+
+					rows[i][columnIndex] = value;
+					break;
+				}
+			}
+		}
+	}
+    
+    /**
+     * @description - This function organizes the events and data so they can be comsumed by the chartComponent.
+     */
+    function buildData() {
+			
+        const eventPlot = [];
+        
+        for(let i = 0; i &lt; listEventObject.length; i++) {
+            if(listEventObject[i].type === 'start') {
+                const { rows, columns } = chartData;
+
+                chartData.columns.splice(0, columns.length);
+                chartData.rows.splice(0, rows.length);
+
+                eventPlot.splice(0,eventPlot.length);
+                
+                eventPlot.push(listEventObject[i]);
+
+            }else if(listEventObject[i].type === 'data' || listEventObject[i].type === 'span' ){
+                eventPlot.push(listEventObject[i]);
+            }else {
+                break;
+            }
+        }
+
+        const startEvent = eventPlot.filter((startObject) => startObject.type === 'start').shift();
+
+        if(startEvent) {
+            
+            const listDataEvent = eventPlot.filter((dataObject) => dataObject.type === 'data');
+            const listSpanEvent = eventPlot.filter((eventObject) => eventObject.type === 'span');
+            const {group, select} = startEvent;
+            // console.log(group , select);
+
+            listSpanEvent.forEach((spanEvent) => {
+                const {begin, end} = spanEvent;
+                const column = addColumns('Periode', chartData.columns);
+                
+                addRows(column,begin,chartData.rows);
+                addRows(column,end,chartData.rows);
+                
+            })
+
+            listDataEvent.forEach((dataEvent) => {
+
+                const groupValues = [];
+                group.forEach((groupName) => {
+                    groupValues.push(dataEvent[groupName]);
+                })
+
+                select.forEach((select) => {
+
+                    const groupName = groupValues.toString().replace(/,/g, ' ');
+                    const selectName = select.replace(/_/g, ' ')
+                    const columnName = `${groupName} ${selectName}`.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+
+                    const columnIndex = addColumns(columnName,chartData.columns);
+
+                    addRows(columnIndex, dataEvent[select], chartData.rows);
+
+                });
+            })
+
+        }
+        handleChartData(chartData);
+    }
+
+    /**
+     * @description - this function gets the input value on the TextArea and transforms it into an object;
+     */
+    function runChart() { 
+        
+        try{
+            const dataString = `[${events.split('\n').filter((data) => (data)).toString()}]`; //this line splits the strings of textArea and remove false values;
+            const objects = JSON.parse(dataString);
+
+            if(objects.length === 0) { throw new Error('The data input cannot be null or empty') }
+
+            setEventList(objects);
+            
+        }catch (error) {//two types of error are possible, syntax error or null or empty value;
+            error.name === 'Error'? toast.error(`${error.message}, please insert a valid JSON format and try again.`) :
+            toast.error('Data input error, please insert a valid JSON format and try again.');
+        }
+        
+    }
+
+    return (
+        &lt;ChartContext.Provider value={{saveEvent: setEvent, setGenerateChart, generateChart, events, listEventObject, runChart, chartData, buildData }} >
+            { children }
+        &lt;/ChartContext.Provider>
+    )
+
+}
+
+export default ChartProvider;//default export</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Feb 08 2022 10:15:49 GMT-0300 (Horário Padrão de Brasília)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

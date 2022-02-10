@@ -1,0 +1,24 @@
+.Error {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+.Message {
+    color: white;
+}
+
+a{
+    text-decoration: none;
+    font-size: 40px;
+    background-color: #0693E3;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 60px;
+    color: aliceblue;
+
+}
