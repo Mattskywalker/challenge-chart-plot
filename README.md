@@ -102,15 +102,3 @@ We expect you to:
 ![challenge_frontend](https://github.com/intelie/challenge-chart-plot/raw/master/challenge_frontend.png "Expected user interface")
 
 Although you can choose any graphical library to plot the chart, we suggest that you use a declarative JS framework to build the application such as ReactJS.
-
-## Solve this challenge
-
-To solve this challenge, you may fork this repository, then
-send us a link with your implementation. Alternatively, if you do not want to have this repo on
-your profile (we totally get it), send us a
-[git patch file](https://www.devroom.io/2009/10/26/how-to-create-and-apply-a-patch-with-git/)
-with your changes.
-
-There is no unique solution to this challenge. The intent is to evaluate candidate's ability and familiarity with tools and best practices.
-
-If you are already in the hiring process, you may send it to whoever is your contact at Intelie. If you wish to apply for a job at Intelie, please send your solution to [trabalhe@intelie.com.br](mailto:trabalhe@intelie.com.br).
